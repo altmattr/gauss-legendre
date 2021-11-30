@@ -4,6 +4,7 @@ import java.math.RoundingMode;
 import java.io.IOException;
 
 // why use arrays instead of functions?  Java doesn't have tail recursion, so we run out of stack space.  Heaps of memory avaialable though.  It is also wayyyyyyy slower
+// we can get to 4 million digits with 2GB of memory which works for me.
 
 public class App{
   static int prec = 100000;
@@ -11,15 +12,35 @@ public class App{
 
   public static void main(String[] args) throws IOException {
     App app = new App();
+    System.out.print("loading up a million digits of pi for comparison ...");
     BigDecimal rpi = Pi.getPi();
-    System.out.println(app.pi(20));
-    for(int i = 1; i < 12; i++){
-      System.out.println("----" + i + "-----");
-      // System.out.println(pid);
-      System.out.println(app.pi(i));
-      // System.out.println(app.pi(precision));
-      System.out.println(rpi.round(new MathContext((int)Math.pow(2, i), RoundingMode.HALF_UP)));
+    System.out.println(" done");
+    System.out.println("I will show you the first 15 interations, eliding the uninteresting bits in the middle");
+    for(int i = 1; i < 25; i++){
+      System.out.println("\niterations = " + i);
+      switch (i){
+        case 16: 
+          System.out.println("we get to 15 quickly, but things start to slow down now as the internal precision needed to work with these values is getting big");
+          break;
+        case 20:
+          System.out.println("we are past a million digits now so out comparison will stop working and we are headed for an arithmetic overflow - good going though I think");
+          break;
+      }
+      BigDecimal myPi = app.pi(i);
+      System.out.println("calculated   : " + truncated(myPi));
+      if (i <=20 ){
+        BigDecimal otherPi = rpi.round(new MathContext((int)Math.pow(2, i)-i, RoundingMode.HALF_UP));
+        System.out.println("internet says: " + truncated(otherPi));
+      }
     }
+  }
+
+  public static String truncated(BigDecimal d){
+    String full = d.toString();
+    if (full.length() < 22)
+      return full;
+    else
+      return (full.substring(0, 9) + "..." + full.substring(full.length()-9) + " (" + full.length() + " digits)");
   }
 
   // is capapble of calculating up to 1 million digits (20 iterations).  Will throw

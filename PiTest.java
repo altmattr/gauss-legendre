@@ -31,7 +31,7 @@ public class PiTest{
   public void testEdgesLow(){
     assertEquals(app.pi(0).toString(), "0");
     assertEquals(app.pi(-1).toString(), "0");
-    assertEquals(app.pi(Integer.MIN_INT).toString(), "0");
+    assertEquals(app.pi(Integer.MIN_VALUE).toString(), "0");
   }
 
   @Test(expected = java.lang.ArithmeticException.class)
