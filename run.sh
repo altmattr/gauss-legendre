@@ -1,0 +1,1 @@
+java -cp ./:lib/junit4.jar App

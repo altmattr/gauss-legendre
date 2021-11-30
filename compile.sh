@@ -1,0 +1,1 @@
+javac -cp lib/junit4.jar -Xlint:deprecation *.java
